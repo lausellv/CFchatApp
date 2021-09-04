@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, StyleSheet, TextInput, View, Text } from "react-native";
+import { ScrollView, Alert, Button, StyleSheet, TextInput, View, Text } from "react-native";
 
 export default class App extends Component {
   state = { text: "" };

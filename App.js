@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-("react");
 import { Alert, Button, StyleSheet, TextInput, View, Text } from "react-native";
 
 export default class App extends Component {

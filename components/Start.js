@@ -11,7 +11,7 @@ export default class Start extends React.Component {
           source={require("../assets/background-image.png")}
         >
           <Text style={styles.title}>Chat App</Text>
-          <View>
+          <View style={styles.whiteBox}>
             <TextInput
               style={styles.nameInput}
               onChangeText={name => this.setState({ name })}
@@ -99,6 +99,17 @@ const styles = StyleSheet.create({
     opacity: 50
   },
 
+  whiteBox: {
+    minHeight: 260,
+    height: "44%",
+    backgroundColor: "rgb(255,255,255)",
+    width: "88%",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    paddingLeft: "6%",
+    paddingRight: "6%",
+    opacity: 0.7
+  },
 
   startButton: {
     color: "#757083",

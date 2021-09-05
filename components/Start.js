@@ -47,6 +47,11 @@ export default class Start extends React.Component {
                 backgroundColor: this.state.backgroundColor
               })
             }
+            accessible={true}
+            accessibilityLabel="Join Chat"
+            accessibilityHint="will take you to chat room"
+            accessibilityRole="button"
+            style={styles.button }
           >
             <Text style={styles.startText}>Let's Chat!</Text>
           </TouchableOpacity>
@@ -65,7 +70,6 @@ const styles = StyleSheet.create({
   },
   nameInput: {
     height: 50,
-    borderColor: "gray",
     borderWidth: 1,
     borderColor: "#8a8697",
     borderRadius: 2,
@@ -120,7 +124,16 @@ const styles = StyleSheet.create({
 
   backgroundColor: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    
+  },
+  button: {
+    width: '50%',
+    height: 40,
+    color: '#FFFFFF',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    justifyContent: 'space-evenly',
   },
 
   colorOption1: {

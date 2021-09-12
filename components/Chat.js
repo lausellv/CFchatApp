@@ -42,7 +42,8 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
-    const { name , backgroundColor} = this.props.route.params;
+    const { name } = this.props.route.params;
+    this.props.navigation.setOptions({ title: `${name}` });
   
 
     // is user online?
@@ -55,35 +56,32 @@ export default class Chat extends React.Component {
       if (!user) {
         firebase.auth().signInAnonymously();
       }
-      const shuffled = user.uid.split('').sort(function(){return 0.5-Math.random()}).join('');
-      this.setState({
+//user is online
+   this.setState({
         uid: user.uid,
+        messages: [],
         user: {
           _id: user.uid,
-          name: username,
-        },
-
-        messages: [{
-          _id: shuffled,
-          text: `Welcome to the chat ${name}`,
-          createdAt: new Date(),
-         },
-      ],
-      isConnected: true
+          name: name,
+        }
+      }),
+        // Create reference to the active users messages
+        this.referenceMessagesUser = firebase.firestore().collection('messages').where('uid', '==', this.state.uid);
+        // Listen for collection changes
+        this.unsubscribe = this.referenceChatMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
       });
-      this.addMessages()
-      this.unsubscribe = this.referenceMessages
-        .orderBy("createdAt", "desc")
-        .onSnapshot(this.onCollectionUpdate);
-    });
-  } else {
+    } else {
+      console.log('offline');
+      this.setState({ isConnected: false })
     this.props.navigation.setOptions({ title: `${name}'s Chat. Offline` });
-    this.setState({ isConnected: false });
-    this.getMessages();
-  }
-    
-    });
-   }
+
+      // Calls messeages from offline storage
+      this.getMessages();
+    }
+  });
+}
+
+       
 
    componentWillUnmount() {
     this.authUnsubscribe();
@@ -104,27 +102,7 @@ export default class Chat extends React.Component {
     });
   }
 
-  onCollectionUpdate = querySnapshot => {
-    const messages = [];
-    // go through each document
-    querySnapshot.forEach(doc => {
-      // get the QueryDocumentSnapshot's data
-      const data = doc.data();
-      messages.push({
-        _id: data._id,
-        text: data.text,
-        createdAt: data.createdAt.toDate(),
-        user: {
-          _id: data.user._id,
-          name: data.user.name
-        }
-      });
-    });
-    this.setState({
-      messages
-    });
-  };
-
+  
   async getMessages() {
     let messages = '';
     try {
@@ -148,6 +126,9 @@ export default class Chat extends React.Component {
   async deleteMessages() {
     try {
       await AsyncStorage.removeItem('messages');
+      this.setState({
+        messages: []
+      })
     } catch (error) {
       console.log(error.message);
     }
@@ -159,12 +140,36 @@ export default class Chat extends React.Component {
       previousState => ({
         messages: GiftedChat.append(previousState.messages, messages)
       }),
-      // Make sure to call addMessages so they get saved to the server
+      // Calls addMessages and saves to server
       () => {
         this.addMessages();
+        // uses local storage to save messages
+        this.saveMessages();
       }
     );
   };
+
+  onCollectionUpdate = querySnapshot => {
+    const messages = [];
+    // go through each document
+    querySnapshot.forEach(doc => {
+      // get the QueryDocumentSnapshot's data
+      const data = doc.data();
+      messages.push({
+        _id: data._id,
+        text: data.text,
+        createdAt: data.createdAt.toDate(),
+        user: {
+          _id: data.user._id,
+          name: data.user.name
+        }
+      });
+    });
+    this.setState({
+      messages
+    });
+  };
+
 
   renderInputToolbar = (props) => {
     if (this.state.isConnected == false) {
@@ -209,15 +214,16 @@ export default class Chat extends React.Component {
             color: "#FFF",
             textAlign: "center",
             lineHeight: 60,
-            paddingTop: 90
+            paddingTop: 30
           }}
         >
           Hello {name}
         </Text>
         <GiftedChat
+             messages={this.state.messages}
            renderInputToolbar={this.renderInputToolbar}
            renderBubble={this.renderBubble}
-          messages={this.state.messages}
+     
           user={this.state.user}
           onSend={messages => this.onSend(messages)}
         />

@@ -214,7 +214,7 @@ export default class Chat extends React.Component {
             color: "#FFF",
             textAlign: "center",
             lineHeight: 60,
-            paddingTop: 30
+            paddingTop: 10
           }}
         >
           Hello {name}

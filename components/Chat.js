@@ -20,13 +20,13 @@ export default class Chat extends React.Component {
       messages: [],
       uid: 0,
       user: {
-        _id: "",
-        name: ""
+          _id: '',
+          name: ''
       },
       isConnected: false,
       image: null,
-      location: null
-    };
+      location: null,
+  }
     // connect to firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDtBTG6ijl6nGx3EdUtsT_jtCJfRUsaSWU",

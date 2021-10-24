@@ -29,13 +29,13 @@ export default class Chat extends React.Component {
   }
     // connect to firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyDtBTG6ijl6nGx3EdUtsT_jtCJfRUsaSWU",
-      authDomain: "cf53test.firebaseapp.com",
-      projectId: "cf53test",
-      storageBucket: "cf53test.appspot.com",
-      messagingSenderId: "576394065211",
-      appId: "1:576394065211:web:e3136b8809f395656e331e",
-      measurementId: "G-WQRNK0X6JH"
+      apiKey: "AIzaSyB9xBrY3MwQUrghCNXM3Q0NYHCUZyNOG2s",
+      authDomain: "test-a2042.firebaseapp.com",
+      projectId: "test-a2042",
+      storageBucket: "test-a2042.appspot.com",
+      messagingSenderId: "348909443941",
+      appId: "1:348909443941:web:1532d59c53fd91c0a39f8c",
+      measurementId: "G-10D9T137P4"
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -83,7 +83,7 @@ export default class Chat extends React.Component {
         this.setState({ isConnected: false });
         this.props.navigation.setOptions({ title: `${name}'s Chat. Offline` });
 
-        // Calls messeages from offline storage
+        // Calls messages from offline storage
         this.getMessages();
       }
     });
